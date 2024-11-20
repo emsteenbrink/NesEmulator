@@ -98,7 +98,7 @@ struct Header
   } flags15;
 };
 
-iNesConfiguration::iNesConfiguration(const fs::path& filePath)
+iNesConfiguration::iNesConfiguration(const std::filesystem::path& filePath)
 {
   ifstream file;
   file.open(filePath, ios::binary);

@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="NesEmulator.cpp" />
-    <ClCompile Include="KeyboardController.cpp" />
+    <ClCompile Include="source\Main.cpp" />
+    <ClCompile Include="source\MainWindow.cpp" />
+    <ClCompile Include="source\NesEmulator.cpp" />
+    <ClCompile Include="source\KeyboardController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NES Emulator Core\NES Emulator Core.vcxproj">
@@ -29,9 +30,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="External\olcPixelGameEngine.h" />
-    <ClInclude Include="NesEmulator.h" />
-    <ClInclude Include="KeyboardController.h" />
+    <ClInclude Include="External\olcPixelGameEngine.ref.h" />
+    <ClInclude Include="source\MainWindow.h" />
+    <ClInclude Include="source\NesEmulator.h" />
+    <ClInclude Include="source\KeyboardController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -103,6 +105,7 @@
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(SolutionDir)SDL2\include;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)SDL2\include;$(IncludePath)</IncludePath>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,6 +178,9 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <Optimization>MaxSpeed</Optimization>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

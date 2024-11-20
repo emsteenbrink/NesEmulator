@@ -15,9 +15,9 @@ public:
   bool IsZero();
 
 private:
-  bool        m_controlFlag;
-  bool        m_reload;
-  uint8_t     m_reloadValue;
+  bool        m_controlFlag = false;
+  bool        m_reload = false;
+  uint8_t     m_reloadValue = 0;
 
-  uint8_t     m_counter;
+  uint8_t     m_counter = 0;
 };

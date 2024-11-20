@@ -17,6 +17,9 @@ public:
   void IRQ_Interrupt();
   void NMI_Interrupt();
 
+  // for testing purposes
+
+
 private:
   enum class AddresMode
   {
@@ -100,7 +103,7 @@ private:
 
   bool m_decimalModeEnabled;
 
-  Instruction* _currentInstruction;
+  Instruction* _currentInstruction = nullptr;
   uint16_t _currentData = 0x0000;
   uint8_t _cycles = 0x00;
   Bus& _bus;

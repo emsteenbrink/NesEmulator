@@ -6,8 +6,6 @@
 
 #include <filesystem>
 
-namespace fs = std::filesystem;
-
 enum class CPU_PPU_TimingMode : uint8_t
 {
   RP2C02 = 0,
@@ -28,7 +26,7 @@ enum class MIRROR
 class iNesConfiguration
 {
 public:
-  iNesConfiguration(const fs::path& filePath);
+  iNesConfiguration(const std::filesystem::path& filePath);
   
   bool HasTrainerData() const;
   const std::vector<uint8_t>& GetTrainerData() const;

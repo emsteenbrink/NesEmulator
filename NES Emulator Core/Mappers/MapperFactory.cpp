@@ -4,7 +4,7 @@
 #include <cassert>
 
 
-std::shared_ptr<Mapper> MapperFactory::CreateMapper(uint16_t mapperId, iNesConfiguration& configuration, const fs::path& filePath)
+std::shared_ptr<Mapper> MapperFactory::CreateMapper(uint16_t mapperId, iNesConfiguration& configuration, const std::filesystem::path& filePath)
 {
   switch (mapperId)
   {

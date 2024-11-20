@@ -27,8 +27,8 @@ public:
   bool Status();
 
 private:
-  bool        m_enabled;
-  bool        m_controlFlag;
+  bool        m_enabled = false;
+  bool        m_controlFlag = false;
 
   Sequencer     m_sequencer;
   LengthCounter m_lengthCounter;

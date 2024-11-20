@@ -33,21 +33,21 @@ private:
   Bus& m_cpuBus;
 
   bool m_pal = false;
-  bool m_enabled;
-  bool m_irqEnabled;
-  bool m_loop;
-  uint16_t m_rate;
+  bool m_enabled = false;
+  bool m_irqEnabled = false;
+  bool m_loop = false;
+  uint16_t m_rate = 0;
   
-  uint16_t m_sampleAddress;
-  uint16_t m_sampleLength;
+  uint16_t m_sampleAddress = 0;
+  uint16_t m_sampleLength = 0;
 
-  uint16_t m_currentAddress;
-  uint16_t m_samplesLeft;
+  uint16_t m_currentAddress = 0;
+  uint16_t m_samplesLeft = 0;
 
-  uint8_t m_sampleBitsLeft;
-  uint8_t m_sampleBuffer;
+  uint8_t m_sampleBitsLeft = 0;
+  uint8_t m_sampleBuffer = 0;
 
-  uint8_t m_shiftReg;
+  uint8_t m_shiftReg = 0;
   uint8_t m_output = 0;
 
   uint16_t m_timer = 0;
@@ -57,5 +57,5 @@ private:
   static const std::array<uint16_t, 16> m_ntscRates;
   static const std::array<uint16_t, 16> m_palRates;
 
-  bool m_interrupt;
+  bool m_interrupt = false;
 };

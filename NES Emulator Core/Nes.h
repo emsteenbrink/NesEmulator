@@ -8,6 +8,7 @@
 #include "IPixelWindow.h"
 
 #include <memory>
+#include <filesystem>
 
 // helper class to not make unsued adrees ranges fail in the bus.
 class UnusedRangesComponent : public Component
@@ -26,7 +27,7 @@ public:
   Nes(IPixelWindow& window);
 
   void AddController(Component& component);
-  void InsertCartridge(const std::string& fileName);
+  void InsertCartridge(const std::filesystem::path& fileName);
 
   const R6502& GetCpu() { return m_cpu.GetCPU(); };
   void Clock();
@@ -35,13 +36,13 @@ public:
   uint8_t ReadPpu(uint16_t address); // read directly from the PPU since it has internals that we might want to read as well.
 
 private:
-  Bus m_cpuBus;
-  Bus m_ppuBus;
+  Bus                         m_cpuBus;
+  Bus                         m_ppuBus;
 
-  CPU_2A03 m_cpu;
-  PPU_2C02 m_ppu;
-  std::unique_ptr<RAM> m_pRam;
-  std::shared_ptr<Cartridge> m_cartridge;
-  unsigned int m_clockCounter;
-  UnusedRangesComponent m_unusedRanges;
+  CPU_2A03                    m_cpu;
+  PPU_2C02                    m_ppu;
+  std::unique_ptr<RAM>        m_pRam;
+  std::shared_ptr<Cartridge>  m_cartridge;
+  unsigned int                m_clockCounter = 0;
+  UnusedRangesComponent       m_unusedRanges;
 };
