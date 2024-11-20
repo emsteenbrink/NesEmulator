@@ -8,6 +8,9 @@
 class PPU_2C02 : public Component
 {
 public:
+  static const int SCREEN_WIDTH = 256;
+  static const int SCREEN_HEIGHT = 240;
+
   PPU_2C02(IPixelWindow& window, Bus& ppuBus, Bus& cpuBus);
 
   // Inherited via Component
@@ -93,20 +96,20 @@ private:
 
   static_assert(sizeof(VRamAddress) == 2, "packing fails");
 
-  PpuCtrl         m_ppuCtrl;
+  PpuCtrl         m_ppuCtrl = {};
   uint8_t&        m_ppuCtrlReg = (uint8_t&)m_ppuCtrl;
-  PpuMask         m_ppuMask;
+  PpuMask         m_ppuMask = {};
   uint8_t&        m_ppuMaskReg = (uint8_t&)(m_ppuMask);
-  PpuStatus       m_ppuStatus;
+  PpuStatus       m_ppuStatus = {};
   uint8_t&        m_ppuStatusReg = (uint8_t&)(m_ppuStatus);
 
   int16_t         m_scanline = 0;
   int16_t         m_cycle = 0;
   bool            m_oddFrame = false;
 
-  VRamAddress     m_currentVRamAddress;
+  VRamAddress     m_currentVRamAddress = {};
   uint16_t&       m_currentVRamAddressReg = (uint16_t&) m_currentVRamAddress;
-  VRamAddress     m_tempVRAMAddress;
+  VRamAddress     m_tempVRAMAddress = {};
   uint16_t&       m_tempVRAMAddressReg = (uint16_t&) m_tempVRAMAddress;
   uint8_t         m_fineScrollX = 0x00;
   bool            m_firstWrite = true;
@@ -116,7 +119,7 @@ private:
   Bus&            m_ppuBus;
   Bus&            m_cpuBus; // needed for DMA;
 
-  uint8_t         m_tblPalette[32]; // The palette table is internal.
+  uint8_t         m_tblPalette[32] = {}; // The palette table is internal.
 
   uint8_t         m_bgNextTileId      = 0x00;
   uint8_t         m_bgNextTileAttrib  = 0x00;
@@ -149,9 +152,9 @@ private:
   uint8_t*            m_pOAM = (uint8_t*)m_oam;
 
   ObjectAttributeItem m_spriteScanline[8];
-  uint8_t m_spriteCount;
-  uint8_t m_spriteShifterPatternLo[8];
-  uint8_t m_spriteShifterPatternHi[8];
+  uint8_t m_spriteCount = 0;
+  uint8_t m_spriteShifterPatternLo[8] = {};
+  uint8_t m_spriteShifterPatternHi[8] = {};
 
   // Sprite Zero Collision Flags
   bool m_spriteZeroHitPossible = false;

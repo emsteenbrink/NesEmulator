@@ -1,26 +1,45 @@
 #include "KeyboardController.h"
 
+#include <iostream>
 
-
+using namespace std;
 
 KeyBoardController::KeyBoardController()
 {
+  if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0)
+  {
+    cout << "SDL could not initialize! SDL_Error:" << SDL_GetError() << endl;
+    return;
+  }
+
   AddAddress(0x4016);
-  //AddAddressRange(0x4016, 0x4017);
 }
 
-//void KeyBoardController::Update()
-//{
-//  //m_controller1 = 0x00;
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::X).bHeld ? 0x80 : 0x00;     // A Button
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::Z).bHeld ? 0x40 : 0x00;     // B Button
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::A).bHeld ? 0x20 : 0x00;     // Select
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::S).bHeld ? 0x10 : 0x00;     // Start
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::UP).bHeld ? 0x08 : 0x00;
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::DOWN).bHeld ? 0x04 : 0x00;
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::LEFT).bHeld ? 0x02 : 0x00;
-//  //m_controller1 |= m_gameEngine.GetKey(olc::Key::RIGHT).bHeld ? 0x01 : 0x00;
-//}
+void KeyBoardController::HandleEvent(const SDL_Event& event)
+{
+  switch (event.type)
+  {
+  case SDL_KEYDOWN:
+    if (event.key.repeat == 0)
+    {
+      HandleKeyDown(event.key.keysym.sym);
+    }
+    break;
+  case SDL_KEYUP:
+    if (event.key.repeat == 0)
+    {
+      HandleKeyUp(event.key.keysym.sym);
+    }
+    break;
+  case SDL_CONTROLLERBUTTONDOWN:
+    HandleButtonDown((SDL_GameControllerButton)event.cbutton.button);
+    break;
+  case SDL_CONTROLLERBUTTONUP:
+    HandleButtonUp((SDL_GameControllerButton)event.cbutton.button);
+    break;
+  }
+}
+
 void KeyBoardController::HandleButtonDown(SDL_GameControllerButton button)
 {
   switch (button)

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Cartridge::Cartridge(Bus& cpuBus, Bus& ppuBus, const fs::path& filePath)
+Cartridge::Cartridge(Bus& cpuBus, Bus& ppuBus, const std::filesystem::path& filePath)
   : m_cpuBus(cpuBus)
   , m_ppuBus(ppuBus)
   , m_configuration(filePath)

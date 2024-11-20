@@ -22,7 +22,7 @@ private:
   bool      m_useConstantVolume = false;
   uint8_t   m_envelopeParameter = 0x00;
 
-  bool      m_restart;
-  uint8_t   m_divider;
-  uint8_t   m_decayLevel;
+  bool      m_restart = false;
+  uint8_t   m_divider = 0;
+  uint8_t   m_decayLevel = 15;
 };

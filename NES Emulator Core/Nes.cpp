@@ -1,5 +1,9 @@
 #include "Nes.h"
 
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 using namespace std;
 
 Nes::Nes(IPixelWindow& window)
@@ -17,7 +21,7 @@ void Nes::AddController(Component& component)
   m_cpuBus.AddComponent(component);
 }
 
-void Nes::InsertCartridge(const std::string& fileName)
+void Nes::InsertCartridge(const std::filesystem::path& fileName)
 {
   m_cartridge = make_shared<Cartridge>(m_cpuBus, m_ppuBus, fileName);
   m_cpu.Reset();

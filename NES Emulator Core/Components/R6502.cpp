@@ -440,11 +440,11 @@ uint16_t R6502::GetAddr()
   case AddresMode::Indirect:
     return Addr_Indirect();
   case AddresMode::Accum:
-    assert(!"Getting addres with accum ???");
+    assert(!"Getting addres with accum ???"); [[fallthrough]];
   case AddresMode::Implied:
-    assert(!"Getting addres with implied ???");
+    assert(!"Getting addres with implied ???"); [[fallthrough]];
   case AddresMode::IMM:
-    assert(!"Getting addres with IMM ???");
+    assert(!"Getting addres with IMM ???"); [[fallthrough]];
   default:
     assert(!"Getting addres with unknown AddresMode");
   }
@@ -1013,7 +1013,7 @@ void R6502::RLA()
 void R6502::RRA()
 {
   uint8_t data = FetchData();
-  bool carry = data & 0x01;
+  uint8_t carry = data & 0x01;
   data >>= 1;
   if (status.Carry())
     data |= 0x80;

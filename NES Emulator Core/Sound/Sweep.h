@@ -18,14 +18,14 @@ public:
   void Clock();
 
 private:
-  Sequencer& m_sequencer;
+  Sequencer&    m_sequencer;
   bool          m_add1sComplement;
 
-  bool          m_enabled;
-  uint8_t       m_dividerPeriod;
-  bool          m_negateFlag;
-  uint8_t       m_shiftCount;
+  bool          m_enabled = false;
+  uint8_t       m_dividerPeriod = 0;
+  bool          m_negateFlag = false;
+  uint8_t       m_shiftCount = 0;
 
-  bool          m_reload;
-  uint8_t       m_divider;
+  bool          m_reload = false;
+  uint8_t       m_divider = 0;
 };

@@ -53,16 +53,22 @@ uint8_t PPU_2C02::Read(uint16_t address)
     // These registers cannot be read.
   case PPUCTRL_2000:
     assert(!"Read from PPUCTRL ???");
+    [[fallthrough]];
   case PPUMASK_2001:
     assert(!"Read from PPUMASK ???");
+    [[fallthrough]];
   case OAMADDR_2003:
     assert(!"Read from OAMADDR ???");
+    [[fallthrough]];
   case PPUSCROLL_2005:
     assert(!"Read from PPUSCROLL ???");
+    [[fallthrough]];
   case PPUADDR_2006:
     assert(!"Read from PPUADDR ???");
+    [[fallthrough]];
   case OAMDMA_4014:
     assert(!"Read from OAMDMA ???");
+    [[fallthrough]];
   default:
     assert(!"PPU_2C02::Read Unknown address");
   }
@@ -129,6 +135,7 @@ void PPU_2C02::Write(uint16_t address, uint8_t data)
     break;
   case PPUSTATUS_2002: // cannot be written to.
     assert(!"Write to PPUCTRL ???");
+    [[fallthrough]];
   default:
     assert(!"PPU_2C02::Write Unknown address");
   }
@@ -929,7 +936,11 @@ void PPU_2C02::Clock()
   // Now we have a final pixel colour, and a palette for this m_cycle
   // of the current m_scanline. Let's at long last, draw that ^&%*er :P
   const Color& color = NesColorTable[PpuRead(0x3F00 + (palette << 2) + pixel) & 0x3F];
-  m_window.SetPixel(m_cycle - 1, m_scanline, color);
+  uint16_t x = m_cycle - 1;
+  uint16_t y = m_scanline;
+  if (x >= 0 && x < this->SCREEN_WIDTH && 
+      y >= 0 && y < this->SCREEN_HEIGHT)
+    m_window.SetPixel(x, y, color);
 
    // Advance renderer - it never stops, it's relentless
   m_cycle++;

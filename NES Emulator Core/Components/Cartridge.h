@@ -8,9 +8,6 @@
 #include <string>
 #include <filesystem>
 
-namespace fs = std::filesystem;
-
-
 class ICartridgeBusHelper
 {
 public:
@@ -51,7 +48,7 @@ private:
 class Cartridge
 {
 public:
-  Cartridge(Bus& cpuBus, Bus& ppuBus, const fs::path& filePath);
+  Cartridge(Bus& cpuBus, Bus& ppuBus, const std::filesystem::path& filePath);
   ~Cartridge();
 
 private:

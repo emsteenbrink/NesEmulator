@@ -1,14 +1,16 @@
 #include "APU.h"
 
-#include <SDL.h>
 #include <algorithm>
 
 using namespace std;
 
-void my_audio_callback(void* userdata, Uint8* stream, int len)
+
+ void APU::my_audio_callback(void* userdata, Uint8* stream, int len)
 {
-  APU* apu = (APU*)userdata;
-  apu->FillSamples(stream, len);
+  APU* apu = static_cast<APU*>(userdata);
+  assert(apu);
+  if (apu)
+    apu->FillSamples(stream, len);
 }
 
 APU::APU(Bus& cpuBus)
@@ -29,7 +31,8 @@ APU::APU(Bus& cpuBus)
   wanted.userdata = this;
 
   /* Open the audio device, forcing the desired format */
-  if (SDL_OpenAudio(&wanted, NULL) < 0) {
+  if (SDL_OpenAudio(&wanted, nullptr) < 0) 
+  {
     fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
     assert(!"SDL_OpenAudio failed");
   }

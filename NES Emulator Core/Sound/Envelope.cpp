@@ -2,7 +2,6 @@
 
 Envelope::Envelope()
 {
-  m_decayLevel = 15;
 }
 
 void Envelope::Loop(bool loop)
