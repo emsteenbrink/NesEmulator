@@ -5,7 +5,6 @@
 #include <exception>
 #include <iostream>
 #include <cstring>
-#include <unistd.h>
 
 using namespace std;
 
@@ -105,7 +104,7 @@ struct Header
 iNesConfiguration::iNesConfiguration(const std::filesystem::path& filePath)
 {
   ifstream file;
-  file.open("/home/ernst/Data/Roms/Super_mario_brothers.nes", ios::binary);
+  file.open(filePath, ios::binary);
   
   if (!file.is_open())
   {

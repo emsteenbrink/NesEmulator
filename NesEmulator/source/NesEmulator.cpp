@@ -37,7 +37,7 @@ NesEmulator::NesEmulator()
   //cartridgePath = "D:/NES/Roms/Donkey Kong (World) (Rev A).nes";
   
   // Mapper 000
-  cartridgePath = "~/Data/Roms/Super_mario_brothers.nes";
+  cartridgePath = "c:/Data/Roms/Super_mario_brothers.nes";
 
   // Mapper 001
   //cartridgePath = "C:/Data/Roms/Bomberman 2 (U).nes";
