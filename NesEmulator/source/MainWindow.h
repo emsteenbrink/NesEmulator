@@ -2,7 +2,7 @@
 
 #include "IPixelWindow.h"
 
-#include "Components\PPU_2C02.h"
+#include "Components/PPU_2C02.h"
 
 #include <SDL.h>
 

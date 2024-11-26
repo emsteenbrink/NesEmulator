@@ -1,6 +1,7 @@
 #include "APU.h"
 
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ APU::APU(Bus& cpuBus)
   , m_sampleBuffer(1789773/2, 44100)
 {
   if (SDL_Init(SDL_INIT_AUDIO) < 0)
+    std::cout << "Failed to SDL_Init(SDL_INIT_AUDIO): " << SDL_GetError();
     assert(!"SDL_Init failed");
 
   SDL_AudioSpec wanted;
@@ -33,7 +35,7 @@ APU::APU(Bus& cpuBus)
   /* Open the audio device, forcing the desired format */
   if (SDL_OpenAudio(&wanted, nullptr) < 0) 
   {
-    fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+    std::cout << "Couldn't open audio: " << SDL_GetError();
     assert(!"SDL_OpenAudio failed");
   }
 

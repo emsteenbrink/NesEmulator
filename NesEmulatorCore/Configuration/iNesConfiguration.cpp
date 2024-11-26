@@ -2,6 +2,10 @@
 
 #include <fstream>
 #include <cassert>
+#include <exception>
+#include <iostream>
+#include <cstring>
+#include <unistd.h>
 
 using namespace std;
 
@@ -101,10 +105,14 @@ struct Header
 iNesConfiguration::iNesConfiguration(const std::filesystem::path& filePath)
 {
   ifstream file;
-  file.open(filePath, ios::binary);
+  file.open("/home/ernst/Data/Roms/Super_mario_brothers.nes", ios::binary);
   
   if (!file.is_open())
-    throw new std::exception("Could not open nes file");
+  {
+    stringstream ss;
+    ss << "File " << filePath << " not open. " << std::strerror(errno);
+    throw std::runtime_error(ss.str());
+  }
 
   Header header = { 0 };
   

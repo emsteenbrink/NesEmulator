@@ -1,5 +1,7 @@
 #include "PPU_2C02.h"
 #include <iostream>
+#include <cstring>
+
 using namespace std;
 
 PPU_2C02::PPU_2C02(IPixelWindow& window, Bus& ppuBus, Bus& cpuBus)

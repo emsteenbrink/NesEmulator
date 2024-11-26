@@ -1,6 +1,7 @@
 #include "BlockBuffer.h"
 
 #include <cassert>
+#include <cstring>
 
 BlockBuffer::BlockBuffer(uint64_t inputRate, uint64_t outputRate)
   : m_resampler((float)inputRate, (float)outputRate)

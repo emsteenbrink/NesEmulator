@@ -1,8 +1,7 @@
 #include "NesEmulator.h"
 
-#include "SoundDriver.h"
-
 #include <filesystem>
+#include <chrono>
 
 namespace fs = std::filesystem;
 
@@ -38,7 +37,7 @@ NesEmulator::NesEmulator()
   //cartridgePath = "D:/NES/Roms/Donkey Kong (World) (Rev A).nes";
   
   // Mapper 000
-  cartridgePath = "C:/Data/Roms/Super_mario_brothers.nes";
+  cartridgePath = "~/Data/Roms/Super_mario_brothers.nes";
 
   // Mapper 001
   //cartridgePath = "C:/Data/Roms/Bomberman 2 (U).nes";
@@ -48,7 +47,7 @@ NesEmulator::NesEmulator()
   m_nes.InsertCartridge(cartridgePath);
   m_emulatorThreadActive = true;
   m_emulatorThread = std::thread(&NesEmulator::RunEmulator, this);
-  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+//  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 }
 
 NesEmulator::~NesEmulator()
@@ -99,7 +98,7 @@ void NesEmulator::RunEmulator()
   while (m_emulatorThreadActive)
   {
     now = std::chrono::high_resolution_clock::now();
-    auto elapsedTime = chrono::duration_cast<chrono::nanoseconds>(now - last).count();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::nanoseconds>(now - last).count();
     last = now;
     residualTime -= elapsedTime;
     if (residualTime < 0)

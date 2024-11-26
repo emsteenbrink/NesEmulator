@@ -14,7 +14,8 @@ endif()
 
 project ("NesEmulator")
 
-set(SDL2_DIR ${CMAKE_CURRENT_LIST_DIR}/ThirdParty/SDL2/cmake/)
+#set(SDL2_DIR ${CMAKE_CURRENT_LIST_DIR}/ThirdParty/SDL2/cmake/)
+include_directories(${SDL_INCLUDE_DIR})
 find_package(SDL2 REQUIRED)
 
 # Include sub-projects.

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <cmath>
+#include <cstring>
 
 Resampler::Resampler(float inputRate, float outputRate)
 {

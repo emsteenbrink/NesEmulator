@@ -27,7 +27,6 @@ add_library(NesEmulatorCore STATIC
             Sound/PulseChannel.cpp
             Sound/Resampler.cpp
             Sound/Sequencer.cpp
-            Sound/SoundDriver.cpp
             Sound/Sweep.cpp
             Sound/TriangleChannel.cpp
             Utils/Range.cpp
@@ -40,6 +39,7 @@ target_include_directories(NesEmulatorCore PUBLIC
           Sound
           Utils
           ./
+          ${SDL2_INCLUDE_DIRS}
 )
 
-target_link_libraries(NesEmulatorCore PRIVATE SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(NesEmulatorCore PRIVATE ${SDL2_LIBRARIES})
