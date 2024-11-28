@@ -1,4 +1,11 @@
 
+if(${WIN32})
+  list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/ThirdParty/SDL2/cmake/)
+endif()
+include_directories(${SDL_INCLUDE_DIR})
+find_package(SDL2 REQUIRED)
+
+
 add_executable(NesEmulator WIN32
        source/KeyboardController.cpp
        source/KeyboardController.h
@@ -13,12 +20,6 @@ add_executable(NesEmulator WIN32
        source/SoundUtils/BlockBuffer.h
        source/SoundUtils/Resampler.cpp
        source/SoundUtils/Resampler.h)
-
-if(${WIN32})
-  list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/ThirdParty/SDL2/cmake/)
-endif()
-include_directories(${SDL_INCLUDE_DIR})
-find_package(SDL2 REQUIRED)
 
 target_link_directories(NesEmulator PRIVATE ${SDL2_INCLUDE_DIRS})
 target_link_libraries(NesEmulator PRIVATE NesEmulatorCore ${SDL2_LIBRARIES})
