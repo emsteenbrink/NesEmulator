@@ -6,8 +6,8 @@ namespace fs = std::filesystem;
 
 using namespace std;
 
-Nes::Nes(IPixelWindow& window)
-  : m_cpu(m_cpuBus)
+Nes::Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor)
+  : m_cpu(m_cpuBus, soundSampleProcessor)
   , m_ppu(window, m_ppuBus, m_cpuBus)
 {
   m_pRam = make_unique<RAM>((uint16_t)2048, (uint16_t)0x0000U, (uint16_t)0x1FFFU);

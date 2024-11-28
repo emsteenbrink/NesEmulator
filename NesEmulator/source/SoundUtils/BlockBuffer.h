@@ -2,11 +2,13 @@
 
 #include "Resampler.h"
 
+#include "ISoundSampleProcessor.h"
+
 #include <cstdint>
 #include <array>
 #include <atomic>
 
-class BlockBuffer
+class BlockBuffer : public ISoundSampleProcessor
 {
 public:
   static const int BLOCK_SIZE = 1024;
@@ -15,11 +17,10 @@ public:
   BlockBuffer(uint64_t inputRate, uint64_t outputRate);
   virtual ~BlockBuffer();
 
-  void AddSample(int16_t sample);
+  // override from ISoundSampleProcessor
+  void AddSample(int16_t sample) override;
 
   void FillSamples(uint8_t* buffer, size_t size);
-
-
 
 private:
   bool CanIncrementReadIndex();

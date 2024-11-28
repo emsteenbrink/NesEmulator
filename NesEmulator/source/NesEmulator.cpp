@@ -8,7 +8,8 @@ namespace fs = std::filesystem;
 
 NesEmulator::NesEmulator() 
   : m_mainWindow(PPU_2C02::SCREEN_WIDTH, PPU_2C02::SCREEN_HEIGHT)
-  , m_nes(m_mainWindow)
+  , m_soundController()
+  , m_nes(m_mainWindow, m_soundController.GetSoundSampleProcessor())
 {
   m_nes.AddController(m_keyboardController);
   

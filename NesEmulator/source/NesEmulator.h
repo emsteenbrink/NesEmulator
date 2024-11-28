@@ -2,6 +2,7 @@
 
 #include "Nes.h"
 #include "KeyboardController.h"
+#include "SoundController.h"
 #include "MainWindow.h"
 
 #include <thread>
@@ -25,7 +26,8 @@ private:
   std::thread         m_emulatorThread;
   std::atomic_bool    m_emulatorThreadActive;
 
-  Nes                 m_nes;
   MainWindow          m_mainWindow;
   KeyBoardController  m_keyboardController;
+  SoundController     m_soundController;
+  Nes                 m_nes;
 };

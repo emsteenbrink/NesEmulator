@@ -5,7 +5,9 @@
 #include "Components/PPU_2C02.h"
 #include "Components/RAM.h"
 #include "Components/Cartridge.h"
+
 #include "IPixelWindow.h"
+#include "ISoundSampleProcessor.h"
 
 #include <memory>
 #include <filesystem>
@@ -24,7 +26,7 @@ public:
 class Nes
 {
 public:
-  Nes(IPixelWindow& window);
+  Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor);
 
   void AddController(Component& component);
   void InsertCartridge(const std::filesystem::path& fileName);

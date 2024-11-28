@@ -5,25 +5,18 @@
 #include "TriangleChannel.h"
 #include "NoiseChannel.h"
 #include "DMCChannel.h"
-#include "BlockBuffer.h"
+#include "ISoundSampleProcessor.h"
 #include "Bus.h"
-
-#include <SDL.h>
 
 class APU : public Component
 {
 public:
-  APU(Bus& cpuBus);
+  APU(Bus& cpuBus, ISoundSampleProcessor& soundSampleProcessor);
   virtual ~APU();
 
   void Clock();
 
-  // Callback function from SDL2
-  void FillSamples(uint8_t* buf, size_t size);
-
 private:
-  static void my_audio_callback(void* userdata, Uint8* stream, int len);
-
   // Inherited via CpuComponent
   virtual uint8_t Read(uint16_t addr) override;
   virtual void Write(uint16_t addr, uint8_t data) override;
@@ -37,7 +30,7 @@ private:
   std::array<uint16_t, 31>    m_pulseTable;
   std::array<uint16_t, 203>   m_tndTable;
 
-  BlockBuffer                 m_sampleBuffer;
+  ISoundSampleProcessor&      m_soundSampleProcessor;
 
   bool                        m_5stepMode = false;
   bool                        m_interuptInhibit = false;

@@ -1,8 +1,8 @@
 #include "CPU_2A03.h"
 
-CPU_2A03::CPU_2A03(Bus& bus) 
+CPU_2A03::CPU_2A03(Bus& bus, ISoundSampleProcessor& soundSampleProcessor)
 : m_cpu(bus, false)
-, m_apu(bus)
+, m_apu(bus, soundSampleProcessor)
 {
   bus.AddComponent(m_apu);
 }

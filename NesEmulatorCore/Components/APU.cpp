@@ -1,46 +1,14 @@
 #include "APU.h"
 
 #include <algorithm>
-#include <iostream>
-
-using namespace std;
 
 
- void APU::my_audio_callback(void* userdata, Uint8* stream, int len)
-{
-  APU* apu = static_cast<APU*>(userdata);
-  assert(apu);
-  if (apu)
-    apu->FillSamples(stream, len);
-}
-
-APU::APU(Bus& cpuBus)
+APU::APU(Bus& cpuBus, ISoundSampleProcessor& soundSampleProcessor)
   : m_pulse1(true)
   , m_pulse2(false)
   , m_dmc(cpuBus)
-  , m_sampleBuffer(1789773/2, 44100)
+  , m_soundSampleProcessor(soundSampleProcessor)
 {
-  if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    std::cout << "Failed to SDL_Init(SDL_INIT_AUDIO): " << SDL_GetError();
-    assert(!"SDL_Init failed");
-
-  SDL_AudioSpec wanted;
-  wanted.freq = 44100;
-  wanted.format = AUDIO_S16;
-  wanted.channels = 1;    /* 1 = mono, 2 = stereo */
-  wanted.samples = 512; //512;  /* Good low-latency value for callback */
-  wanted.callback = my_audio_callback;
-  wanted.userdata = this;
-
-  /* Open the audio device, forcing the desired format */
-  if (SDL_OpenAudio(&wanted, nullptr) < 0) 
-  {
-    std::cout << "Couldn't open audio: " << SDL_GetError();
-    assert(!"SDL_OpenAudio failed");
-  }
-
-  SDL_PauseAudio(0);
-
   AddAddressRange(0x4000, 0x4013);
   AddAddress(0x4015);
   AddAddress(0x4017);
@@ -66,7 +34,6 @@ APU::APU(Bus& cpuBus)
 
 APU::~APU()
 {
-  SDL_CloseAudio();
 }
 
 void APU::Clock()
@@ -111,7 +78,7 @@ void APU::Clock()
     //std::for_each(begin(m_channels), end(m_channels), [](IChannel* i) {i->Clock(); });
     int32_t pulseOut = m_pulseTable[m_pulse1.Output() + m_pulse2.Output()];
     int32_t tndOut = m_tndTable[3 * m_triangle.Output() + 2 * m_noise.Output() + m_dmc.Output()];
-    m_sampleBuffer.AddSample(int16_t((pulseOut + tndOut)));
+    m_soundSampleProcessor.AddSample(int16_t((pulseOut + tndOut)));
   }
 
   m_triangle.Clock();
@@ -179,8 +146,3 @@ void APU::Write(uint16_t address, uint8_t data)
 
 int current = 0;
 std::vector<int> samples;
-
-void APU::FillSamples(uint8_t* buf, size_t size)
-{
-  m_sampleBuffer.FillSamples(buf, size);
-}

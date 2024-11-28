@@ -7,7 +7,7 @@
 class CPU_2A03
 {
 public:
-  CPU_2A03(Bus& bus);;
+  CPU_2A03(Bus& bus, ISoundSampleProcessor& soundSampleProcessor);
   
   void Clock(bool clockCyclesStolen);
   void Reset();
