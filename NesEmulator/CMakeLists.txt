@@ -21,7 +21,8 @@ add_executable(NesEmulator WIN32
        source/SoundUtils/Resampler.cpp
        source/SoundUtils/Resampler.h)
 
-target_link_directories(NesEmulator PRIVATE ${SDL2_INCLUDE_DIRS})
+target_include_directories(NesEmulator PRIVATE ${SDL2_INCLUDE_DIRS})
+#target_link_directories(NesEmulator PRIVATE ${SDL2_INCLUDE_DIRS})
 target_link_libraries(NesEmulator PRIVATE NesEmulatorCore ${SDL2_LIBRARIES})
 
 if(${WIN32})
