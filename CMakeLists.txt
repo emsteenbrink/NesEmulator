@@ -17,4 +17,5 @@ project ("NesEmulator")
 # Include sub-projects.
 add_subdirectory ("NesEmulatorCore")
 add_subdirectory ("NesEmulator")
+add_subdirectory ("Test_Components")
 
