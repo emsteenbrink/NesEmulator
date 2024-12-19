@@ -77,8 +77,9 @@ uint8_t PPU_2C02::Read(uint16_t address)
   return result;
 }
 
-void PPU_2C02::Write(uint16_t address, uint8_t data)
+uint8_t PPU_2C02::Write(uint16_t address, uint8_t data)
 {
+  uint8_t prevValue = 0;
   assert(address == 0x4014 || (address >= 0x2000 && address <= 0x3FFF));
   if (address != 0x4014)
   {
@@ -99,6 +100,7 @@ void PPU_2C02::Write(uint16_t address, uint8_t data)
     m_oamAddress = data;
     break;
   case OAMDATA_2004:
+    prevValue = m_pOAM[m_oamAddress];
     m_pOAM[m_oamAddress] = data;
     break;
   case PPUSCROLL_2005:
@@ -127,6 +129,7 @@ void PPU_2C02::Write(uint16_t address, uint8_t data)
     m_firstWrite = !m_firstWrite;
     break;
   case PPUDATA_2007:
+    prevValue = m_currentVRamAddressReg;
     PpuWrite(m_currentVRamAddressReg, data);
     m_currentVRamAddressReg += (m_ppuCtrl.VRAM_Inc ? 32 : 1);
     break;
@@ -141,6 +144,7 @@ void PPU_2C02::Write(uint16_t address, uint8_t data)
   default:
     assert(!"PPU_2C02::Write Unknown address");
   }
+  return prevValue;
 }
 
 
@@ -988,7 +992,8 @@ uint8_t PPU_2C02::PpuRead(uint16_t address)
 
 void PPU_2C02::PpuWrite(uint16_t address, uint8_t data)
 {
-  if (m_ppuBus.Write(address, data))
+  uint8_t dummy;
+  if (m_ppuBus.Write(address, data, dummy))
   {
     return;
   }

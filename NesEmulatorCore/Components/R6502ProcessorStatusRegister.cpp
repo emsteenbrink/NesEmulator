@@ -6,6 +6,7 @@ R6502ProcessorStatusRegister::R6502ProcessorStatusRegister()
  : m_status(0x00)
 {
   Set(Flag::Unused, true);
+  Set(Flag::IRQDisable, true);
 }
 
 R6502ProcessorStatusRegister::R6502ProcessorStatusRegister(uint8_t value)
@@ -18,6 +19,7 @@ void R6502ProcessorStatusRegister::Reset()
 {
   m_status.reset();
   Set(Flag::Unused, true);
+  Set(Flag::IRQDisable, true);
 }
 
 bool R6502ProcessorStatusRegister::Negative()
@@ -96,7 +98,6 @@ void R6502ProcessorStatusRegister::SetCarry(bool value)
   Set(Flag::Carry, value);
 }
 
-
 R6502ProcessorStatusRegister::operator uint8_t()
 {
   return (uint8_t)m_status.to_ulong();
@@ -106,6 +107,7 @@ R6502ProcessorStatusRegister& R6502ProcessorStatusRegister::operator=(uint8_t va
 {
   m_status = value;
   Set(Flag::Unused, true);
+  Set(Flag::BrkCommand, false);
   return *this;
 }
 

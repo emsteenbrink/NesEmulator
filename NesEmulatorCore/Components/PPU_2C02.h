@@ -15,7 +15,7 @@ public:
 
   // Inherited via Component
   virtual uint8_t Read(uint16_t address) override;
-  virtual void Write(uint16_t address, uint8_t data) override;
+  virtual uint8_t Write(uint16_t address, uint8_t data) override;
 
   void Clock();
   bool CPUClock(unsigned int counter);
@@ -23,6 +23,9 @@ public:
   uint8_t PpuBusReadDebug(uint16_t address) { return PpuRead(address); };
 
   bool nmi = false;
+
+  int16_t GetCycle() const { return m_cycle; };
+  int16_t GetScanLine() const { return m_scanline; };
 
 private:
   uint8_t PpuRead(uint16_t address);
@@ -104,7 +107,7 @@ private:
   uint8_t&        m_ppuStatusReg = (uint8_t&)(m_ppuStatus);
 
   int16_t         m_scanline = 0;
-  int16_t         m_cycle = 0;
+  int16_t         m_cycle = -4;
   bool            m_oddFrame = false;
 
   VRamAddress     m_currentVRamAddress = {};

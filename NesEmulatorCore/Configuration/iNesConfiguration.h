@@ -41,6 +41,8 @@ public:
   uint16_t GetMapperId() const;
   MIRROR GetMirror() const;
   
+  bool isValid() const;
+  const std::string& getError() const;
 
 private:
   uint16_t              m_mapperId;
@@ -52,5 +54,7 @@ private:
   MIRROR                m_hwMirror;
   uint8_t               m_prgBanks;
   uint8_t               m_chrBanks;
+  bool                  m_isValid = true;
+  std::string           m_error;
 };
 

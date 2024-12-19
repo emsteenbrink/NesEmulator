@@ -19,7 +19,7 @@ public:
 private:
   // Inherited via CpuComponent
   virtual uint8_t Read(uint16_t addr) override;
-  virtual void Write(uint16_t addr, uint8_t data) override;
+  virtual uint8_t Write(uint16_t addr, uint8_t data) override;
 
   PulseChannel                m_pulse1;
   PulseChannel                m_pulse2;

@@ -63,10 +63,12 @@ bool Bus::Read(uint16_t addr, uint8_t& data)
   return false;
 }
 
-bool Bus::Write(uint16_t addr, uint8_t data)
+bool Bus::Write(uint16_t addr, uint8_t data, uint8_t& prevData)
 {
   if (m_cartridge && m_cartridge->Write(addr, data))
   {
+    // TODO: make the cartridge also return the previous value.
+    prevData = 0;
     return true;
   }
   else
@@ -76,7 +78,7 @@ bool Bus::Write(uint16_t addr, uint8_t data)
       auto& range = it->first;
       if (addr >= range.low() && addr <= range.high())
       {
-        it->second->Write(addr, data);
+        prevData = it->second->Write(addr, data);
         return true;
       }
     }

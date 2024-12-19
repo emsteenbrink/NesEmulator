@@ -15,28 +15,30 @@ NesEmulator::NesEmulator()
   
   fs::path cartridgePath;
   // Test
-  //cartridgePath = "D:/Nes/Test Roms/test_apu_env.nes";
-  //cartridgePath = "D:/Nes/Test Roms/Sound/volume_tests/volumes.nes";
-  //cartridgePath = "D:/Nes/Test Roms/Sound/apu_mixer/square.nes";
-  //cartridgePath = "D:/Nes/Test Roms/Sound/dmc_test/status_irq.nes";
-  //cartridgePath = "D:/Nes/Roms/nestest.nes";
-  //cartridgePath = "D:/Nes/Test Roms/nes-test-roms/branch_timing_tests/1.Branch_Basics.nes";
-  //cartridgePath = "D:/Nes/Test Roms/nes-test-roms/branch_timing_tests/2.Backward_Branch.nes";
-  //cartridgePath = "D:/Nes/Test Roms/nes-test-roms/branch_timing_tests/3.Forward_Branch.nes";
-  //Needs mapper 003: cartridgePath = "D:/Nes/Test Roms/nes-test-roms/cpu_dummy_reads/cpu_dummy_reads.nes";
-  //fail: cartridgePath = "D:/Nes/Test Roms/nes-test-roms/cpu_dummy_writes/cpu_dummy_writes_oam.nes";
-  //cartridgePath = "C:\Data/Test Roms/nes-test-roms/cpu_dummy_writes/cpu_dummy_writes_ppumem.nes";
+  //cartridgePath = "C:/Data/Test Roms/test_apu_env.nes";
+  //cartridgePath = "C:/Data/Test Roms/Sound/volume_tests/volumes.nes";
+  //cartridgePath = "C:/Data/Test Roms/Sound/apu_mixer/square.nes";
+  //cartridgePath = "C:/Data/Test Roms/Sound/dmc_test/status_irq.nes";
+  //cartridgePath = "C:/Data/Test Roms/apu_test.nes"; 
+  //cartridgePath = "C:/Data/Roms/nestest.nes";
+  //cartridgePath = "C:/Data/Test Roms/nes-test-roms/branch_timing_tests/1.Branch_Basics.nes";
+  //cartridgePath = "C:/Data/Test Roms/nes-test-roms/branch_timing_tests/2.Backward_Branch.nes";
+  //cartridgePath = "C:/Data/Test Roms/nes-test-roms/branch_timing_tests/3.Forward_Branch.nes";
+  //Needs mapper 003: cartridgePath = "C:/Data/Test Roms/nes-test-roms/cpu_dummy_reads/cpu_dummy_reads.nes";
+  //fail: cartridgePath = "C:/Data/Test Roms/nes-test-roms/cpu_dummy_writes/cpu_dummy_writes_oam.nes";
+  //fail: cartridgePath = "C:/Data/Test Roms/nes-test-roms/cpu_dummy_writes/cpu_dummy_writes_ppumem.nes";
 
 
   // ???
-  //Fail: cartridgePath = "D:/NES/Roms/Donkey Kong 3 (JUE) [p1].nes";  
-  //cartridgePath = "D:/NES/Roms/Exed Exes (J) [p1].nes";
-  //cartridgePath = "D:/NES/Roms/Kung Fu (U).nes";
-  //cartridgePath = "D:/NES/Roms/Pac-Man (U) [!].nes";
-  //cartridgePath = "D:/NES/Roms/Excitebike (E).nes";
-  //cartridgePath = "D:/NES/Roms/Elevator Action (U).nes";
-  //cartridgePath = "D:/NES/Roms/Donkey Kong (World) (Rev A).nes";
-  
+  //Fail: cartridgePath = "C:/Data/Roms/Donkey Kong 3 (JUE) [p1].nes";  
+  //cartridgePath = "C:/Data/Roms/Exed Exes (J) [p1].nes";
+  //cartridgePath = "C:/Data/Roms/Kung Fu (U).nes";
+  //cartridgePath = "C:/Data/Roms/Pac-Man (U) [!].nes";
+  //cartridgePath = "C:/Data/Roms/Excitebike (E).nes";
+  //cartridgePath = "C:/Data/Roms/Elevator Action (U).nes";
+  //cartridgePath = "C:/Data/Roms/Donkey Kong (World) (Rev A).nes";
+  //cartridgePath = "C:/Data/Roms/Adventures of Lolo (USA).nes";
+
   // Mapper 000
   cartridgePath = "c:/Data/Roms/Super_mario_brothers.nes";
 
@@ -45,16 +47,26 @@ NesEmulator::NesEmulator()
   //cartridgePath = "C:/Data/Roms/The Addams Family (U).nes";
   //cartridgePath = "C:/Data/Roms/The Chessmaster (U).nes";
 
-  m_nes.InsertCartridge(cartridgePath);
+  // Mapper 003
+  //cartridgePath = "C:/Data/Roms/Donkey Kong Classics (U).nes";
+
+  bool catridgeOk = m_nes.InsertCartridge(cartridgePath);
+  if (!catridgeOk)
+  {
+    SDL_ShowSimpleMessageBox(0, "Error", m_nes.getCartridgeError().c_str(), NULL);
+    return;
+  }
   m_emulatorThreadActive = true;
   m_emulatorThread = std::thread(&NesEmulator::RunEmulator, this);
-//  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 }
 
 NesEmulator::~NesEmulator()
 {
-  m_emulatorThreadActive = false;
-  m_emulatorThread.join();
+  if (m_emulatorThreadActive)
+  {
+    m_emulatorThreadActive = false;
+    m_emulatorThread.join();
+  }
 }
 
 void NesEmulator::Run()

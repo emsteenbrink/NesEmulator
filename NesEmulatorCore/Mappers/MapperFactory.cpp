@@ -10,7 +10,8 @@ std::shared_ptr<Mapper> MapperFactory::CreateMapper(uint16_t mapperId, iNesConfi
   {
   case 000: return std::make_shared<Mapper_000>(configuration, filePath);
   case 001: return std::make_shared<Mapper_001>(configuration, filePath);
+  default:
+    return nullptr;
   }
-  assert(!"Unknown mapper ID");
   return nullptr;
 }

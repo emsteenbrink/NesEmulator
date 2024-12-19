@@ -14,7 +14,7 @@ public:
 
   // Inherited via Component
   virtual uint8_t Read(uint16_t address) override;
-  virtual void Write(uint16_t address, uint8_t data) override;
+  virtual uint8_t Write(uint16_t address, uint8_t data) override;
 
 public:
   std::vector<uint8_t> m_ram;

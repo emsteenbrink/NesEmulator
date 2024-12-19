@@ -55,7 +55,7 @@ add_library(NesEmulatorCore STATIC
             Sound/TriangleChannel.h
             Utils/Range.cpp
             Utils/Range.h
-)
+ 			ICpuLogger.h)
 
 target_include_directories(NesEmulatorCore PUBLIC 
           Components

@@ -18,7 +18,7 @@ public:
   void RemoveCartridge();
 
   bool Read(uint16_t addr, uint8_t& data);
-  bool Write(uint16_t addr, uint8_t data);
+  bool Write(uint16_t addr, uint8_t data, uint8_t& prevData);
 
 private:
   std::map<Range, Component*>              m_components;

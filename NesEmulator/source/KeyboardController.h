@@ -14,7 +14,7 @@ public:
 private:
   // Inherited via Component
   virtual uint8_t Read(uint16_t address) override;
-  virtual void Write(uint16_t address, uint8_t data) override;
+  virtual uint8_t Write(uint16_t address, uint8_t data) override;
 
   void HandleButtonDown(SDL_GameControllerButton button);
   void HandleButtonUp(SDL_GameControllerButton button);

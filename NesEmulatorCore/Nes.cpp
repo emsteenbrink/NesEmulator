@@ -6,8 +6,8 @@ namespace fs = std::filesystem;
 
 using namespace std;
 
-Nes::Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor)
-  : m_cpu(m_cpuBus, soundSampleProcessor)
+Nes::Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor, std::shared_ptr<ICpuLogger> cpuLogger)
+  : m_cpu(m_cpuBus, soundSampleProcessor, cpuLogger)
   , m_ppu(window, m_ppuBus, m_cpuBus)
 {
   m_pRam = make_unique<RAM>((uint16_t)2048, (uint16_t)0x0000U, (uint16_t)0x1FFFU);
@@ -21,10 +21,22 @@ void Nes::AddController(Component& component)
   m_cpuBus.AddComponent(component);
 }
 
-void Nes::InsertCartridge(const std::filesystem::path& fileName)
+bool Nes::InsertCartridge(const std::filesystem::path& fileName, std::optional<uint16_t> programCounter)
 {
   m_cartridge = make_shared<Cartridge>(m_cpuBus, m_ppuBus, fileName);
-  m_cpu.Reset();
+  if (!m_cartridge->isValid())
+  {
+    return false;
+  }
+  m_cpu.Reset(programCounter);
+  return true;
+}
+
+const std::string& Nes::getCartridgeError()
+{
+  if (m_cartridge)
+    return m_cartridge->getError();
+  return "No cartridge loaded";
 }
 
 void Nes::Clock()
@@ -33,7 +45,7 @@ void Nes::Clock()
   if (m_clockCounter % 3 == 0)
   {
     bool ppuSteals = m_ppu.CPUClock(m_clockCounter);
-    m_cpu.Clock(ppuSteals); // apu is also in here.
+    m_cpu.Clock(ppuSteals, m_ppu.GetCycle(), m_ppu.GetScanLine()); // apu is also in here.
   }
   if (m_ppu.nmi)
   {

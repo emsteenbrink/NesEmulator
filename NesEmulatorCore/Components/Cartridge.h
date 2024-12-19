@@ -8,6 +8,8 @@
 #include <string>
 #include <filesystem>
 
+// Use a intermediary class to make a distinction for the PPU and CPU bus. They should result in different calls to the mapper.
+// CpuRead/CpuWrite vs PpuRead/PpuWrite.
 class ICartridgeBusHelper
 {
 public:
@@ -51,6 +53,9 @@ public:
   Cartridge(Bus& cpuBus, Bus& ppuBus, const std::filesystem::path& filePath);
   ~Cartridge();
 
+  bool isValid() const;
+  const std::string& getError() const;
+
 private:
   iNesConfiguration             m_configuration;
   std::shared_ptr<CpuBusHelper> m_cpuBusHelper;
@@ -58,4 +63,6 @@ private:
   Bus&                          m_cpuBus;
   Bus&                          m_ppuBus;
   std::shared_ptr<Mapper>       m_mapper;
+  bool                          m_isValid = true;
+  std::string                   m_error;
 };

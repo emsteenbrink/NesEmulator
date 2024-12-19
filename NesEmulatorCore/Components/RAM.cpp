@@ -19,8 +19,10 @@ uint8_t RAM::Read(uint16_t address)
   return m_ram[realAddress];
 }
 
-void RAM::Write(uint16_t address, uint8_t data)
+uint8_t RAM::Write(uint16_t address, uint8_t data)
 {
   auto realAddress = (address - m_beginAddress) % m_size;
+  uint8_t prevValue = m_ram[realAddress];
   m_ram[realAddress] = data;
+  return prevValue;
 }

@@ -117,15 +117,19 @@ uint8_t KeyBoardController::Read(uint16_t address)
   return result;
 }
 
-void KeyBoardController::Write(uint16_t address, uint8_t /*data*/)
+uint8_t KeyBoardController::Write(uint16_t address, uint8_t /*data*/)
 {
+  uint8_t prevValue;
   switch (address)
   {
   case 0x4016:
+    prevValue = (m_controllerState1 & 0x80) > 0;
     m_controllerState1 = m_controller1;
     break;
   case 0x4017:
+    prevValue = (m_controllerState2 & 0x80) > 0;
     m_controllerState2 = m_controller2;
     break;
   }
+  return prevValue;
 }

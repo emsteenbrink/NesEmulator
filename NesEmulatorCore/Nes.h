@@ -20,16 +20,18 @@ public:
 
   // Inherited via Component
   virtual uint8_t Read(uint16_t /*address*/) override { return 0; }
-  virtual void Write(uint16_t /*address*/, uint8_t /*data*/) override {}
+  virtual uint8_t Write(uint16_t /*address*/, uint8_t /*data*/) override { return 0; }
 };
 
 class Nes
 {
 public:
-  Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor);
+  Nes(IPixelWindow& window, ISoundSampleProcessor& soundSampleProcessor, std::shared_ptr<ICpuLogger> cpuLogger = nullptr);
 
   void AddController(Component& component);
-  void InsertCartridge(const std::filesystem::path& fileName);
+  bool InsertCartridge(const std::filesystem::path& fileName, std::optional<uint16_t> programCounter = std::nullopt);
+
+  const std::string& getCartridgeError();
 
   const R6502& GetCpu() { return m_cpu.GetCPU(); };
   void Clock();

@@ -108,19 +108,24 @@ iNesConfiguration::iNesConfiguration(const std::filesystem::path& filePath)
   
   if (!file.is_open())
   {
-    stringstream ss;
-    ss << "File " << filePath << " not open. " << std::strerror(errno);
-    throw std::runtime_error(ss.str());
+    m_isValid = false;
+    m_error = std::format("Failed loading configuration file: {}", filePath.string());
+    return;
   }
 
   Header header = { 0 };
-  
   static_assert(sizeof(Header) == 16, "packing fails");
 
   file.read((char*)&header, sizeof(header));
-
-  assert(header.constant[0] == 'N' && header.constant[1] == 'E' && header.constant[2] == 'S' && header.constant[3] == 0x1A);
-
+  if (header.constant[0] != 'N' ||
+      header.constant[1] != 'E' ||
+      header.constant[2] != 'S' ||
+      header.constant[3] != 0x1A)
+  {
+    m_isValid = false;
+    m_error = std::format("Malformed Header");
+    return;
+  }
 
   bool isNes2 = header.flags7.fileFormat == 2;
 
@@ -143,13 +148,21 @@ iNesConfiguration::iNesConfiguration(const std::filesystem::path& filePath)
   if(isNes2)
   {
     if (header.flags9.nes20.prgRomChunksMSB == 0xf)
-      throw std::runtime_error("Prg Rom extended/multiplier not supported");
+    {
+      m_isValid = false;
+      m_error = std::format("Prg Rom extended/multiplier not supported");
+      return;
+    }
 
     m_prgBanks = (uint16_t)header.flags9.nes20.prgRomChunksMSB << 8 | header.prgRomChunks;
     prgRomDataSize = m_prgBanks * 16384;
 
     if (header.flags9.nes20.chrRomChunksMSB == 0xf)
-      throw std::runtime_error("Chr Rom extended/multiplier not supported");
+    {
+      m_isValid = false;
+      m_error = std::format("Chr Rom extended/multiplier not supported");
+      return;
+    }
 
     m_chrBanks = (uint16_t)header.flags9.nes20.chrRomChunksMSB << 8 | header.chrRomChunks;
     chrRomDataSize = m_chrBanks * 8192;
@@ -231,4 +244,14 @@ uint16_t iNesConfiguration::GetMapperId() const
 MIRROR iNesConfiguration::GetMirror() const
 {
   return m_hwMirror;
+}
+
+bool iNesConfiguration::isValid() const
+{
+  return m_isValid;
+}
+
+const std::string& iNesConfiguration::getError() const
+{
+  return m_error;
 }

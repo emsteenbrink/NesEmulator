@@ -101,11 +101,12 @@ uint8_t APU::Read(uint16_t address)
       | m_triangle.Status() << 2
       | m_pulse2.Status() << 1
       | m_pulse1.Status() << 0;
+    break;
   }
-  return 0;
+  return 0x00;
 }
 
-void APU::Write(uint16_t address, uint8_t data)
+uint8_t APU::Write(uint16_t address, uint8_t data)
 {
   switch (address)
   {
@@ -140,9 +141,22 @@ void APU::Write(uint16_t address, uint8_t data)
     m_5stepMode = data & 0x80;
     m_sequenceResetTimer = 4;
     m_interuptInhibit = data & 0x40;
+    m_time = 0;
+    if (m_5stepMode)
+    {
+      //m_pulse1.Clock();
+      //m_pulse2.Clock();
+      //m_triangle.Clock();
+      //m_noise.Clock();
+      //m_dmc.Clock();
+      m_pulse1.DoHalfFrame();
+      m_pulse2.DoHalfFrame();
+      m_triangle.DoHalfFrame();
+      m_noise.DoHalfFrame();
+      m_dmc.DoHalfFrame();
+    }
     break;
   }
+  return 0xFF;
 }
 
-int current = 0;
-std::vector<int> samples;

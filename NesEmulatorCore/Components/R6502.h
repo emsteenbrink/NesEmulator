@@ -1,24 +1,28 @@
 #pragma once
 
 #include "Bus.h"
+#include "R6502ProcessorStatusRegister.h"
+#include "ICpuLogger.h"
+
 #include <vector>
 #include <string>
 #include <map>
-#include "R6502ProcessorStatusRegister.h"
+#include <optional>
+#include <fstream>
 
 class R6502
 {
 public:
-  R6502(Bus& bus, bool decimalModeEnabled);
+  R6502(Bus& bus, bool decimalModeEnabled, std::shared_ptr<ICpuLogger> cpuLogger=nullptr);
   ~R6502();
 
-  void Clock();
-  void Reset();
+  void Clock(uint16_t ppuX, uint16_t ppuY);
+  void Reset(std::optional<uint16_t> programCounter = std::nullopt);
   void IRQ_Interrupt();
   void NMI_Interrupt();
 
   // for testing purposes
-
+  uint16_t getPc() const { return pc; };
 
 private:
   enum class AddresMode
@@ -47,6 +51,7 @@ private:
       , instruction_bytes(1)
       , cycles(2)
       , cyclesCanExtend(false)
+      , isInvalid(false)
     {
     }
 
@@ -55,13 +60,15 @@ private:
                 void(R6502::* operation_)(),
                 uint8_t instruction_bytes_, 
                 uint8_t cycles_, 
-                bool cyclesCanExtend_)
+                bool cyclesCanExtend_,
+                bool isInvalid_ = false)
       : opcode(opcode_)
       , addresMode(addresMode_)
       , operation(operation_)
       , instruction_bytes(instruction_bytes_)
       , cycles(cycles_)
       , cyclesCanExtend(cyclesCanExtend_)
+      , isInvalid(isInvalid_)
     {
     }
 
@@ -71,15 +78,23 @@ private:
     uint8_t instruction_bytes;
     uint8_t cycles;
     bool cyclesCanExtend;
+    bool isInvalid;
   };
 
-  uint16_t Addr_ABS_XY(uint8_t regValue);
-  uint16_t Addr_IND_X();
+  uint16_t Addr_ABS() const;
+  uint16_t Addr_ZP() const;
+  uint16_t Addr_ZP_X() const ;
+  uint16_t Addr_ZP_Y() const;
+  uint16_t Addr_ABS_X();
+  uint16_t Addr_ABS_Y();
+  uint16_t Addr_Relative() const;
+  uint16_t Addr_IND_X() const;
   uint16_t Addr_IND_Y();
-  uint16_t Addr_Indirect();
-  
+  uint16_t Addr_Indirect() const;
+
   uint16_t ReadData(uint8_t bytes);
   uint16_t GetAddr();
+  std::string GetAddrString() const;
 
   uint8_t FetchData();
   void WriteData(uint8_t data);
@@ -97,7 +112,7 @@ private:
   void SRE();
 
   uint8_t BusRead(uint16_t address) const;
-  void BusWrite(uint16_t address, uint8_t data);
+  uint8_t BusWrite(uint16_t address, uint8_t data);
 
   void HandleBranch(bool branch);
 
@@ -115,4 +130,7 @@ private:
   uint16_t pc = 0x0000;                     // Program Counter 'PC'
   uint8_t sp = 0x00;                        // Stack Pointer 'S'
   R6502ProcessorStatusRegister status;      // Processor Status Reg 'P'
+
+  std::shared_ptr<ICpuLogger>         m_cpuLogger;
+  mutable ICpuLogger::CpuLogLine      m_cpuLogline;
 };
