@@ -6,6 +6,7 @@
 #include "CpuLogger.h"
 
 #include <fstream>
+#include <format>
 
 class DummyPixelWindow : public IPixelWindow
 {
